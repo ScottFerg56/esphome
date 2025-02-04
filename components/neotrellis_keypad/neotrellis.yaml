@@ -1,0 +1,173 @@
+esphome:
+  name: neotrellis
+  friendly_name: NeoTrellis
+  
+esp32:
+  board: adafruit_feather_esp32_v2 # esp32dev
+  framework:
+    type: arduino
+
+external_components:
+  - source:
+      type: local
+      path: my_components
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "W6n3a8FDYt2xwRiD4SHqQkSN6Dk8SDi+MGQbY5wuiXw="
+
+ota:
+  - platform: esphome
+    password: "42b89dc49e925489e5a0aaadf47dfaed"
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: 192.168.0.202
+    gateway: 192.168.0.1
+    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Neotrellis Fallback Hotspot"
+    password: "h2vHPD5HrLYG"
+
+captive_portal:
+    
+neotrellis_keypad:
+  id: mykeypad
+  keys: "PONMLKJIHGFEDCBA"
+
+binary_sensor:
+  - platform: neotrellis_keypad
+    name: "KeyA"
+    key: A
+  - platform: neotrellis_keypad
+    name: "KeyB"
+    key: B
+  - platform: neotrellis_keypad
+    name: "KeyC"
+    key: C
+  - platform: neotrellis_keypad
+    name: "KeyD"
+    key: D
+  - platform: neotrellis_keypad
+    name: "KeyE"
+    key: E
+  - platform: neotrellis_keypad
+    name: "KeyF"
+    key: F
+  - platform: neotrellis_keypad
+    name: "KeyG"
+    key: G
+  - platform: neotrellis_keypad
+    name: "KeyH"
+    key: H
+  - platform: neotrellis_keypad
+    name: "KeyI"
+    key: I
+  - platform: neotrellis_keypad
+    name: "KeyJ"
+    key: J
+  - platform: neotrellis_keypad
+    name: "KeyK"
+    key: K
+  - platform: neotrellis_keypad
+    name: "KeyL"
+    key: L
+  - platform: neotrellis_keypad
+    name: "KeyM"
+    key: M
+  - platform: neotrellis_keypad
+    name: "KeyN"
+    key: N
+  - platform: neotrellis_keypad
+    name: "KeyO"
+    key: O
+  - platform: neotrellis_keypad
+    name: "KeyP"
+    id: keyP
+    key: P
+    on_press:
+      # - homeassistant.service:
+      #     service: homeassistant.toggle
+      #     data: {"entity_id": "light.den_floor_lamp"}
+      - lambda: id(lightP).turn_on().set_rgb(0.0,0.8,0.0).set_transition_length(100).perform();
+    on_release:
+      - lambda: id(lightP).turn_off().set_transition_length(100).perform();
+
+light:
+  - platform: neotrellis_keypad
+    name: "LightA"
+    key: A
+  - platform: neotrellis_keypad
+    name: "LightB"
+    key: B
+  - platform: neotrellis_keypad
+    name: "LightC"
+    key: C
+  - platform: neotrellis_keypad
+    name: "LightD"
+    key: D
+  - platform: neotrellis_keypad
+    name: "LightE"
+    key: E
+  - platform: neotrellis_keypad
+    name: "LightF"
+    key: F
+  - platform: neotrellis_keypad
+    name: "LightG"
+    key: G
+  - platform: neotrellis_keypad
+    name: "LightH"
+    key: H
+  - platform: neotrellis_keypad
+    name: "LightI"
+    key: I
+  - platform: neotrellis_keypad
+    name: "LightJ"
+    key: J
+  - platform: neotrellis_keypad
+    name: "LightK"
+    key: K
+  - platform: neotrellis_keypad
+    name: "LightL"
+    key: L
+  - platform: neotrellis_keypad
+    name: "LightM"
+    key: M
+  - platform: neotrellis_keypad
+    name: "LightN"
+    key: N
+  - platform: neotrellis_keypad
+    name: "LightO"
+    key: O
+  - platform: neotrellis_keypad
+    name: "LightP"
+    id: lightP
+    key: P
+
+key_collector:
+  - id: pincode_reader
+    source_id: mykeypad
+    min_length: 4
+    max_length: 4
+    allowed_keys: "MNOP"
+    timeout: 5s
+    on_progress:
+      - logger.log:
+          format: "input progress: '%s', started by '%c'"
+          args: [ 'x.c_str()', "(start == 0 ? '~' : start)" ]
+    on_result:
+      - logger.log:
+          format: "input result: '%s', started by '%c', ended by '%c'"
+          args: [ 'x.c_str()', "(start == 0 ? '~' : start)", "(end == 0 ? '~' : end)" ]
+    on_timeout:
+      - logger.log:
+          format: "input timeout: '%s', started by '%c'"
+          args: [ 'x.c_str()', "(start == 0 ? '~' : start)" ]
