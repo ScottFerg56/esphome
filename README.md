@@ -80,9 +80,12 @@ light:
     id: lightP
     key: P
 ```
-## Keycaps (coming soon!)
+## Keycaps
 The 'Silicone Elastomer' button cover material provided in the 4x4 NeoTrellis Kit Pack resists
-being written on or having anything stuck to it for labeling. So I've designed 3D-printed keycaps
+being written on or having anything stuck to it for labeling. So I've designed 3D-printed and customizable keycaps
 to fit snugly over the silicone buttons. I've made some in black with transparent icons from
 the [Material Design Icons](https://pictogrammers.com/library/mdi/) set (used by HA) that work
 well as functional lighted keycaps!
+
+Find them at my [NeoTrellis Keycaps repo](https://github.com/ScottFerg56/NeoTrellis-Keycaps).
+
